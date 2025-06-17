@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/auth';
-import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { formatPrice } from '../lib/utils';
 import { ShoppingBag, ChevronRight, PackageOpen } from 'lucide-react';
 
-// Mock order data - in a real app this would come from an API
 const mockOrders = [
   {
     id: 'ORD-12345',
@@ -50,7 +48,7 @@ const mockOrders = [
 export function OrdersPage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
-  
+
   // Redirect if not logged in
   React.useEffect(() => {
     if (!isAuthenticated) {
@@ -76,13 +74,16 @@ export function OrdersPage() {
       <div className="container mx-auto px-4 py-16 text-center">
         <div className="max-w-lg mx-auto">
           <ShoppingBag className="h-16 w-16 mx-auto text-gray-400 mb-6" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">No Orders Yet</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Aún no hay pedidos</h1>
           <p className="text-gray-600 mb-8">
-            You haven't placed any orders yet. Start shopping to see your orders here.
+            Todavía no has realizado ningún pedido. Comienza a comprar para ver tus pedidos aquí.
           </p>
-          <Button as={Link} to="/" variant="primary">
-            Start Shopping
-          </Button>
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-blue-600 text-white hover:bg-blue-700 focus-visible:ring-blue-600 h-10 px-4 py-2"
+          >
+            Comenzar a comprar
+          </Link>
         </div>
       </div>
     );
@@ -90,8 +91,8 @@ export function OrdersPage() {
 
   return (
     <div className="container mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Orders</h1>
-      
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Tus pedidos</h1>
+
       <div className="space-y-6">
         {mockOrders.map((order) => (
           <Card key={order.id} className="overflow-hidden">
@@ -100,12 +101,27 @@ export function OrdersPage() {
               <div className="flex flex-wrap justify-between items-start gap-4">
                 <div>
                   <div className="flex items-center">
-                    <h3 className="font-medium">Order #{order.id}</h3>
-                    <span className={`ml-4 px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadgeColor(order.status)}`}>
-                      {order.status}
+                    <h3 className="font-medium">Pedido #{order.id}</h3>
+                    <span
+                      className={`ml-4 px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadgeColor(
+                        order.status
+                      )}`}
+                    >
+                      {order.status === 'processing' && 'procesando'}
+                      {order.status === 'shipped' && 'enviado'}
+                      {order.status === 'delivered' && 'entregado'}
+                      {['processing', 'shipped', 'delivered'].indexOf(order.status) === -1 &&
+                        order.status}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">Placed on {new Date(order.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Realizado el{' '}
+                    {new Date(order.date).toLocaleDateString('es-ES', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </p>
                 </div>
                 <div className="text-right">
                   <p className="font-medium">Total</p>
@@ -113,27 +129,27 @@ export function OrdersPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Order Items */}
             <div className="p-6">
               <div className="space-y-4">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex items-center gap-4">
                     <Link to={`/product/${item.id}`} className="flex-shrink-0">
-                      <img 
-                        src={item.image} 
+                      <img
+                        src={item.image}
                         alt={item.name}
                         className="w-16 h-16 object-cover rounded-md"
                       />
                     </Link>
                     <div className="flex-grow">
-                      <Link 
-                        to={`/product/${item.id}`} 
+                      <Link
+                        to={`/product/${item.id}`}
                         className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
                       >
                         {item.name}
                       </Link>
-                      <p className="text-sm text-gray-500 mt-1">Quantity: {item.quantity}</p>
+                      <p className="text-sm text-gray-500 mt-1">Cantidad: {item.quantity}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-medium">{formatPrice(item.price)}</p>
@@ -142,33 +158,30 @@ export function OrdersPage() {
                 ))}
               </div>
             </div>
-            
+
             {/* Order Footer */}
             <div className="p-6 bg-gray-50 border-t flex justify-between items-center">
               <div>
                 {order.status === 'processing' && (
                   <div className="flex items-center text-blue-600">
                     <PackageOpen size={18} className="mr-2" />
-                    <span className="text-sm">Your order is being prepared</span>
+                    <span className="text-sm">Tu pedido está siendo preparado</span>
                   </div>
                 )}
                 {order.status === 'shipped' && (
                   <div className="flex items-center text-blue-600">
                     <PackageOpen size={18} className="mr-2" />
-                    <span className="text-sm">Your order is on its way</span>
+                    <span className="text-sm">Tu pedido está en camino</span>
                   </div>
                 )}
               </div>
-              <Button
-                variant="outline" 
-                size="sm"
-                className="flex items-center"
-                as={Link}
+              <Link
                 to="#"
+                className="inline-flex items-center h-8 px-3 text-xs border border-gray-300 bg-transparent hover:bg-gray-50 focus-visible:ring-gray-500 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none"
               >
-                Order Details
+                Detalles del pedido
                 <ChevronRight size={16} className="ml-1" />
-              </Button>
+              </Link>
             </div>
           </Card>
         ))}
