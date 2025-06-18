@@ -17,7 +17,7 @@ export function ProductPage() {
 
   // Get product data
   const product = id ? getProductById(id) : undefined;
-  
+
   // Cart and wishlist functionality
   const { addItem } = useCartStore();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
@@ -25,9 +25,9 @@ export function ProductPage() {
   if (!product) {
     return (
       <div className="container mx-auto px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
-        <p className="mb-6">The product you're looking for doesn't exist or has been removed.</p>
-        <Button onClick={() => navigate('/')}>Back to Home</Button>
+        <h1 className="text-2xl font-bold mb-4">Producto no encontrado</h1>
+        <p className="mb-6">El producto que buscas no existe o ha sido eliminado.</p>
+        <Button onClick={() => navigate('/')}>Volver al inicio</Button>
       </div>
     );
   }
@@ -80,15 +80,14 @@ export function ProductPage() {
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`h-5 w-5 ${
-                    i < Math.floor(product.rating)
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "fill-gray-300 text-gray-300"
-                  }`}
+                  className={`h-5 w-5 ${i < Math.floor(product.rating)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "fill-gray-300 text-gray-300"
+                    }`}
                 />
               ))}
             </div>
-            <span className="text-gray-600">{product.rating} out of 5</span>
+            <span className="text-gray-600">{product.rating} de 5</span>
           </div>
 
           <div className="mt-6">
@@ -101,7 +100,7 @@ export function ProductPage() {
                   {formatPrice(product.price)}
                 </span>
                 <span className="ml-3 px-2 py-1 bg-red-100 text-red-800 text-sm font-semibold rounded">
-                  Save {product.discount}%
+                  Ahorra {product.discount}%
                 </span>
               </div>
             ) : (
@@ -117,7 +116,7 @@ export function ProductPage() {
 
           <div className="mt-6">
             <div className="flex items-center mb-6">
-              <span className="text-gray-700 mr-3">Quantity:</span>
+              <span className="text-gray-700 mr-3">Cantidad:</span>
               <div className="flex items-center border border-gray-300 rounded">
                 <button
                   className="px-3 py-1 border-r border-gray-300 text-gray-500 hover:bg-gray-100"
@@ -141,7 +140,7 @@ export function ProductPage() {
                 </button>
               </div>
               <span className="ml-4 text-sm text-gray-500">
-                {product.stock} available
+                {product.stock} disponibles
               </span>
             </div>
 
@@ -153,8 +152,8 @@ export function ProductPage() {
                 className="flex-grow"
                 disabled={product.stock === 0}
               >
-                <ShoppingCart className="mr-2 h-5 w-5" /> 
-                {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                <ShoppingCart className="mr-2 h-5 w-5" />
+                {product.stock === 0 ? 'Agotado' : 'Agregar al carrito'}
               </Button>
               <Button
                 onClick={handleWishlistToggle}
@@ -162,18 +161,17 @@ export function ProductPage() {
                 size="lg"
               >
                 <Heart
-                  className={`mr-2 h-5 w-5 ${
-                    inWishlist ? "fill-red-500 text-red-500" : ""
-                  }`}
+                  className={`mr-2 h-5 w-5 ${inWishlist ? "fill-red-500 text-red-500" : ""
+                    }`}
                 />
-                {inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                {inWishlist ? 'Quitar de favoritos' : 'Agregar a favoritos'}
               </Button>
             </div>
           </div>
 
           {/* Key Features */}
           <div className="mt-8 border-t border-gray-200 pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Features</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Características clave</h3>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {Object.entries(product.specifications || {}).map(([key, value]) => (
                 <li key={key} className="flex items-start">
@@ -191,15 +189,15 @@ export function ProductPage() {
             <div className="flex flex-col space-y-3">
               <div className="flex items-center">
                 <Truck className="h-5 w-5 text-gray-500 mr-3" />
-                <span>Free shipping on orders over $50</span>
+                <span>Envío gratis en pedidos superiores a $50</span>
               </div>
               <div className="flex items-center">
                 <Shield className="h-5 w-5 text-gray-500 mr-3" />
-                <span>2 year extended warranty</span>
+                <span>2 años de garantía extendida</span>
               </div>
               <div className="flex items-center">
                 <RotateCcw className="h-5 w-5 text-gray-500 mr-3" />
-                <span>30-day money-back guarantee</span>
+                <span>Garantía de devolución de dinero por 30 días</span>
               </div>
             </div>
           </div>
@@ -211,34 +209,31 @@ export function ProductPage() {
         <div className="border-b border-gray-200">
           <div className="flex -mb-px">
             <button
-              className={`mr-8 py-4 text-sm font-medium border-b-2 ${
-                activeTab === 'description'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
+              className={`mr-8 py-4 text-sm font-medium border-b-2 ${activeTab === 'description'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
               onClick={() => setActiveTab('description')}
             >
-              Description
+              Descripción
             </button>
             <button
-              className={`mr-8 py-4 text-sm font-medium border-b-2 ${
-                activeTab === 'specifications'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
+              className={`mr-8 py-4 text-sm font-medium border-b-2 ${activeTab === 'specifications'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
               onClick={() => setActiveTab('specifications')}
             >
-              Specifications
+              Especificaciones
             </button>
             <button
-              className={`mr-8 py-4 text-sm font-medium border-b-2 ${
-                activeTab === 'reviews'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
+              className={`mr-8 py-4 text-sm font-medium border-b-2 ${activeTab === 'reviews'
+                ? 'border-blue-600 text-blue-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
               onClick={() => setActiveTab('reviews')}
             >
-              Reviews
+              Reseñas
             </button>
           </div>
         </div>
@@ -248,15 +243,15 @@ export function ProductPage() {
               <p className="text-base text-gray-600 leading-relaxed">
                 {product.description}
                 <br /><br />
-                Experience cutting-edge technology with the {product.name}. Designed for performance and style, this premium device offers an exceptional user experience with its advanced features and sleek design.
+                Experimenta la tecnología de vanguardia con el {product.name}. Diseñado para ofrecer rendimiento y estilo, este dispositivo premium brinda una experiencia excepcional gracias a sus funciones avanzadas y su diseño elegante.
                 <br /><br />
-                Whether you're a tech enthusiast, a professional, or a casual user, the {product.name} is built to exceed expectations and deliver outstanding value.
+                Ya seas un entusiasta de la tecnología, un profesional o un usuario casual, el {product.name} está hecho para superar tus expectativas y ofrecer un valor sobresaliente.
               </p>
             </div>
           )}
           {activeTab === 'specifications' && (
             <div>
-              <h3 className="text-lg font-semibold mb-4">Technical Specifications</h3>
+              <h3 className="text-lg font-semibold mb-4">Especificaciones técnicas</h3>
               <div className="border rounded-lg overflow-hidden">
                 <table className="w-full text-sm">
                   <tbody>
@@ -273,7 +268,7 @@ export function ProductPage() {
           )}
           {activeTab === 'reviews' && (
             <div className="text-center py-8">
-              <p className="text-gray-600">Reviews are coming soon!</p>
+              <p className="text-gray-600">¡Las reseñas estarán disponibles pronto!</p>
             </div>
           )}
         </div>
@@ -283,7 +278,7 @@ export function ProductPage() {
       {relatedProducts.length > 0 && (
         <div className="mt-16">
           <ProductGrid
-            title="You May Also Like"
+            title="También te puede interesar"
             products={relatedProducts}
           />
         </div>

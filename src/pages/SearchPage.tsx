@@ -29,10 +29,10 @@ export function SearchPage() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Search Results</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Resultados de búsqueda</h1>
         {query && (
           <p className="text-gray-600 mt-2">
-            Showing results for "{query}"
+            Mostrando resultados para "{query}"
           </p>
         )}
       </div>
@@ -48,9 +48,9 @@ export function SearchPage() {
           ) : (
             <div className="text-center py-16">
               <SearchIcon className="h-16 w-16 mx-auto text-gray-400 mb-6" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">No results found</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">No se encontraron resultados</h2>
               <p className="text-gray-600 max-w-lg mx-auto">
-                We couldn't find any products matching "{query}". Try checking your spelling or using more general terms.
+                No pudimos encontrar productos que coincidan con "{query}". Intenta revisar la ortografía o usa términos más generales.
               </p>
             </div>
           )}
