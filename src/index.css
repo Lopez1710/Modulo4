@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Personalización para el carousel en el Hero */
+.hero-carousel {
+  padding-bottom: 35px; /* Espacio adicional para los dots */
+  position: relative;
+}
+
+.hero-carousel .slick-dots {
+  bottom: -5px; /* Posición ajustada para los dots */
+  position: relative;
+  width: 100%;
+  margin-top: 15px;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-carousel .slick-dots li {
+  margin: 0 4px; /* Espaciado horizontal entre dots */
+  width: 10px;
+  height: 10px;
+}
+
+/* Estilos para los dots personalizados */
+.hero-carousel .slick-dots li button {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+}
+
+.hero-carousel .slick-dots li button:before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.hero-carousel .slick-dots li.slick-active button:before {
+  background-color: white;
+  transform: scale(1.2);
+}
+
+/* Ocultar flechas por defecto de Slick */
+.hero-carousel .slick-prev:before,
+.hero-carousel .slick-next:before {
+  display: none;
+  content: "";
+}
+
+/* Estilo para nuestras flechas personalizadas */
+.slick-custom-prev,
+.slick-custom-next {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  outline: none;
+  border: none;
+}
+
+.hero-carousel .slick-prev:hover,
+.hero-carousel .slick-next:hover,
+.hero-carousel .slick-prev:focus,
+.hero-carousel .slick-next:focus {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.hero-carousel .slick-prev {
+  left: -10px;
+}
+
+.hero-carousel .slick-next {
+  right: -10px;
+}
+
+.hero-carousel .slick-slide > div {
+  padding: 6px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .hero-carousel .slick-prev {
+    left: -5px;
+  }
+
+  .hero-carousel .slick-next {
+    right: -5px;
+  }
+}
