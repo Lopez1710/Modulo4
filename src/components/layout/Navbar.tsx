@@ -41,9 +41,9 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const accountMenuRef = React.useRef<HTMLDivElement>(null);
   const location = useLocation();
 
-  // Detectar scroll para cambiar el estilo de la barra de navegación
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -53,7 +53,6 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Cerrar el menú móvil cuando cambia la ruta
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location.pathname]);
@@ -65,16 +64,28 @@ export function Navbar() {
     }
   };
 
-  // Determinar si una categoría está activa
   const isCategoryActive = (categoryValue: string) => {
     return location.pathname === `/category/${categoryValue}`;
   };
 
+  useEffect(() => {
+    if (!isAccountMenuOpen) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        accountMenuRef.current &&
+        !accountMenuRef.current.contains(event.target as Node)
+      ) {
+        setIsAccountMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isAccountMenuOpen]);
+
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white shadow-md" : "bg-white shadow-sm"
-      }`}
+      className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white shadow-md" : "bg-white shadow-sm"
+        }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
@@ -136,20 +147,16 @@ export function Navbar() {
             </Link>
 
             {isAuthenticated ? (
-              <div className="relative">
+              <div className="relative" ref={accountMenuRef}>
                 <button
                   className="flex items-center space-x-1 rounded-full px-3 py-1.5 hover:bg-gray-100 transition-colors"
-                  onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-                  onBlur={() =>
-                    setTimeout(() => setIsAccountMenuOpen(false), 100)
-                  }
+                  onClick={() => setIsAccountMenuOpen((v) => !v)}
                 >
                   <User className="h-5 w-5 text-gray-700" />
                   <span className="text-sm font-medium">Cuenta</span>
                   <ChevronDown
-                    className={`h-4 w-4 text-gray-500 transition-transform duration-200 ${
-                      isAccountMenuOpen ? "rotate-180" : ""
-                    }`}
+                    className={`h-4 w-4 text-gray-500 transition-transform duration-200 ${isAccountMenuOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 {isAccountMenuOpen && (
@@ -262,11 +269,10 @@ export function Navbar() {
               <Link
                 key={category.value}
                 to={`/category/${category.value}`}
-                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-                  isCategoryActive(category.value)
-                    ? "text-blue-600 bg-blue-50"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-                }`}
+                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${isCategoryActive(category.value)
+                  ? "text-blue-600 bg-blue-50"
+                  : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                  }`}
               >
                 <category.icon className="mr-2 h-4 w-4" />
                 {category.label}
@@ -278,15 +284,13 @@ export function Navbar() {
 
       {/* Mobile menu */}
       <div
-        className={`md:hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-40 transition-opacity duration-300 ${
-          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`md:hidden fixed inset-0 bg-gray-800 bg-opacity-50 z-40 transition-opacity duration-300 ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         onClick={() => setIsMenuOpen(false)}
       ></div>
       <div
-        className={`md:hidden fixed top-16 bottom-0 right-0 w-64 bg-white z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto ${
-          isMenuOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
-        }`}
+        className={`md:hidden fixed top-16 bottom-0 right-0 w-64 bg-white z-50 transform transition-transform duration-300 ease-in-out overflow-y-auto ${isMenuOpen ? "translate-x-0 shadow-xl" : "translate-x-full"
+          }`}
       >
         <div className="px-4 py-5 border-b border-gray-200">
           <form onSubmit={handleSearchSubmit} className="relative mb-4">
@@ -316,11 +320,10 @@ export function Navbar() {
               <Link
                 key={category.value}
                 to={`/category/${category.value}`}
-                className={`flex items-center px-3 py-2 rounded-md w-full ${
-                  isCategoryActive(category.value)
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-700 hover:bg-gray-50"
-                }`}
+                className={`flex items-center px-3 py-2 rounded-md w-full ${isCategoryActive(category.value)
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-gray-700 hover:bg-gray-50"
+                  }`}
                 onClick={(e) => {
                   e.stopPropagation(); // Prevenir que el clic cierre el menú demasiado pronto
                   setTimeout(() => setIsMenuOpen(false), 150);
